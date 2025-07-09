@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 import '../widgets/product_card.dart';
 import '../widgets/stats_card.dart';
+import '../models/product.dart';
+import '../services/api_service.dart';
+import 'add_product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Product>> _productsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productsFuture = ApiService.fetchProducts();
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _productsFuture = ApiService.fetchProducts();
+    });
+  }
+
+  void _goToAddProduct() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => AddProductScreen()),
+    );
+    if (result == true) _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icons.add_circle_outline,
                       color: const Color(0xFFE8B4CB),
                       onTap: () {
-                        // TODO: Navigate to add product
+                        _goToAddProduct();
                       },
                     ),
                   ),
@@ -179,29 +203,25 @@ class _HomeScreenState extends State<HomeScreen> {
               
               // Sample Products
               Expanded(
-                child: ListView(
-                  children: const [
-                    ProductCard(
-                      name: 'Laptop',
-                      category: 'Elektronik',
-                      quantity: 15,
-                      price: 15000.0,
-                    ),
-                    SizedBox(height: 12),
-                    ProductCard(
-                      name: 'Mouse',
-                      category: 'Elektronik',
-                      quantity: 8,
-                      price: 150.0,
-                    ),
-                    SizedBox(height: 12),
-                    ProductCard(
-                      name: 'Klavye',
-                      category: 'Elektronik',
-                      quantity: 12,
-                      price: 300.0,
-                    ),
-                  ],
+                child: FutureBuilder<List<Product>>(
+                  future: _productsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Hata: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('Henüz ürün eklemediniz.'));
+                    }
+                    final products = snapshot.data!;
+                    return RefreshIndicator(
+                      onRefresh: _refresh,
+                      child: ListView.builder(
+                        itemCount: products.length,
+                        itemBuilder: (context, index) => ProductCard(product: products[index]),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -209,9 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Navigate to add product
-        },
+        onPressed: _goToAddProduct,
         backgroundColor: const Color(0xFFE8B4CB),
         child: const Icon(Icons.add, color: Colors.white),
       ),

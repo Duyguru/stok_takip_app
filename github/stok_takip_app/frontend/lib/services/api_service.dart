@@ -1,0 +1,33 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../models/product.dart';
+
+class ApiService {
+  static const String BASE_URL = 'http://127.0.0.1:8000';
+
+  // Kullanıcı ID sabit (örnek: 1)
+  static const int userId = 1;
+
+  static Future<List<Product>> fetchProducts() async {
+    final response = await http.get(Uri.parse('$BASE_URL/users/ $userId/products/'));
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body);
+      return data.map((e) => Product.fromJson(e)).toList();
+    } else {
+      throw Exception('Ürünler alınamadı');
+    }
+  }
+
+  static Future<Product> addProduct(Product product) async {
+    final response = await http.post(
+      Uri.parse('$BASE_URL/users/ $userId/products/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(product.toJson()),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return Product.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Ürün eklenemedi');
+    }
+  }
+} 
