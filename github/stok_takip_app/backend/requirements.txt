@@ -2,3 +2,7 @@ fastapi
 uvicorn
 sqlalchemy
 pydantic 
+celery
+redis
+python-dotenv
+aiosmtplib 
