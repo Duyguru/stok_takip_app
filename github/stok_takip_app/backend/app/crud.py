@@ -26,4 +26,14 @@ def create_product(db: Session, product: schemas.ProductCreate, user_id: int):
     return db_product
 
 def get_products(db: Session, user_id: int):
-    return db.query(models.Product).filter(models.Product.user_id == user_id).all() 
+    return db.query(models.Product).filter(models.Product.user_id == user_id).all()
+
+def delete_product(db: Session, product_id: int):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if product:
+        # İlişkili bedenleri sil
+        db.query(models.TrackedSize).filter(models.TrackedSize.product_id == product_id).delete()
+        db.delete(product)
+        db.commit()
+        return True
+    return False 

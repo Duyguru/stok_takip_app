@@ -30,4 +30,11 @@ class ApiService {
       throw Exception('Ürün eklenemedi');
     }
   }
+
+  static Future<void> deleteProduct(int productId) async {
+    final response = await http.delete(Uri.parse('$BASE_URL/products/$productId'));
+    if (response.statusCode != 200) {
+      throw Exception('Ürün silinemedi');
+    }
+  }
 } 

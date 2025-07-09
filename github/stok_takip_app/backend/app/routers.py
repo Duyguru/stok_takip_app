@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import crud, schemas, models, database
-from .tasks import schedule_stock_check
+from .tasks import schedule_stock_check, stop_stock_check
 
 router = APIRouter()
 
@@ -27,4 +27,13 @@ def create_product_for_user(user_id: int, product: schemas.ProductCreate, db: Se
 
 @router.get("/users/{user_id}/products/", response_model=list[schemas.Product])
 def read_products(user_id: int, db: Session = Depends(get_db)):
-    return crud.get_products(db, user_id=user_id) 
+    return crud.get_products(db, user_id=user_id)
+
+@router.delete("/products/{product_id}")
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    success = crud.delete_product(db, product_id)
+    if success:
+        stop_stock_check(product_id)
+        return {"ok": True}
+    else:
+        raise HTTPException(status_code=404, detail="Ürün bulunamadı") 

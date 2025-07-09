@@ -34,6 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
     if (result == true) _refresh();
   }
 
+  Future<void> _deleteProduct(int productId) async {
+    try {
+      await ApiService.deleteProduct(productId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ürün silindi')),
+      );
+      _refresh();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Silinemedi: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,7 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       onRefresh: _refresh,
                       child: ListView.builder(
                         itemCount: products.length,
-                        itemBuilder: (context, index) => ProductCard(product: products[index]),
+                        itemBuilder: (context, index) => ProductCard(
+                          product: products[index],
+                          onDelete: () => _deleteProduct(products[index].id!),
+                        ),
                       ),
                     );
                   },

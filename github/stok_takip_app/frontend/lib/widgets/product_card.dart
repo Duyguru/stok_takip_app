@@ -3,7 +3,8 @@ import '../models/product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  final void Function()? onDelete;
+  const ProductCard({Key? key, required this.product, this.onDelete}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,17 @@ class ProductCard extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
-            Text('Takip Edilen Bedenler:'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Takip Edilen Bedenler:'),
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red),
+                  onPressed: onDelete,
+                  tooltip: 'Sil',
+                ),
+              ],
+            ),
             ...product.trackedSizes.map((size) => Row(
                   children: [
                     Text(size.size),
