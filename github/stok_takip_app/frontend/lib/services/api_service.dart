@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/product.dart';
 
 class ApiService {
-  static const String BASE_URL = 'http://127.0.0.1:8000';
+  static const String BASE_URL = 'http://10.0.2.2:8000';
 
   // Kullanıcı ID sabit (örnek: 1)
   static const int userId = 1;
