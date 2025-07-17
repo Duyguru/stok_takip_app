@@ -6,3 +6,5 @@ celery
 redis
 python-dotenv
 aiosmtplib 
+requests
+beautifulsoup4 
