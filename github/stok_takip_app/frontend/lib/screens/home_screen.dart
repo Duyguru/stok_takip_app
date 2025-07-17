@@ -4,6 +4,7 @@ import '../widgets/stats_card.dart';
 import '../models/product.dart';
 import '../services/api_service.dart';
 import 'add_product_screen.dart';
+import 'notification_settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -126,11 +127,17 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: StatsCard(
-                      title: 'Toplam Ürün',
-                      value: '24',
-                      icon: Icons.inventory_2_outlined,
-                      color: const Color(0xFFE8B4CB),
+                    child: FutureBuilder<List<Product>>(
+                      future: _productsFuture,
+                      builder: (context, snapshot) {
+                        final int productCount = snapshot.hasData ? snapshot.data!.length : 0;
+                        return StatsCard(
+                          title: 'Toplam Ürün',
+                          value: productCount.toString(),
+                          icon: Icons.inventory_2_outlined,
+                          color: const Color(0xFFE8B4CB),
+                        );
+                      },
                     ),
                   ),
                   // Düşük Stok kartı kaldırıldı
@@ -165,11 +172,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _buildQuickActionCard(
-                      title: 'Stok Güncelle',
-                      icon: Icons.edit_outlined,
+                      title: 'Bildirim Ayarları',
+                      icon: Icons.notifications_active_outlined,
                       color: const Color(0xFF81C784),
                       onTap: () {
-                        // TODO: Navigate to update stock
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const NotificationSettingsScreen(),
+                          ),
+                        );
                       },
                     ),
                   ),
