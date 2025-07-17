@@ -14,10 +14,15 @@ def get_db():
 
 @router.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=user.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db=db, user=user)
+
+@router.post("/users/{user_id}/fcm_token")
+def update_fcm_token(user_id: int, fcm_token: str, db: Session = Depends(get_db)):
+    user = crud.update_user_fcm_token(db, user_id, fcm_token)
+    if user:
+        return {"ok": True}
+    else:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
 
 @router.post("/users/{user_id}/products/", response_model=schemas.Product)
 def create_product_for_user(user_id: int, product: schemas.ProductCreate, db: Session = Depends(get_db)):

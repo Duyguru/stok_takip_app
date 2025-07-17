@@ -6,7 +6,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
+    fcm_token = Column(String, nullable=True)
     products = relationship("Product", back_populates="user")
 
 class Product(Base):

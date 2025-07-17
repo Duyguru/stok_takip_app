@@ -26,7 +26,7 @@ class Product(ProductBase):
         orm_mode = True
 
 class UserBase(BaseModel):
-    email: str
+    fcm_token: Optional[str] = None
 
 class UserCreate(UserBase):
     pass
