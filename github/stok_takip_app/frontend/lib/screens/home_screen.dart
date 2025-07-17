@@ -133,15 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: const Color(0xFFE8B4CB),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Düşük Stok',
-                      value: '3',
-                      icon: Icons.warning_amber_outlined,
-                      color: const Color(0xFFFFB74D),
-                    ),
-                  ),
+                  // Düşük Stok kartı kaldırıldı
                 ],
               ),
               
@@ -220,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: FutureBuilder<List<Product>>(
                   future: _productsFuture,
                   builder: (context, snapshot) {
+                    final int productCount = snapshot.hasData ? snapshot.data!.length : 0;
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
