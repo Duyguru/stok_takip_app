@@ -12,13 +12,13 @@ class ProductCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
               product.url,
               style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+                  ),
             SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,12 +39,12 @@ class ProductCard extends StatelessWidget {
                       size.inStock ? Icons.check_circle : Icons.cancel,
                       color: size.inStock ? Colors.green : Colors.red,
                       size: 18,
-                    ),
+                        ),
                     SizedBox(width: 4),
                     Text(size.inStock ? 'Stokta' : 'Yok'),
                   ],
                 )),
-          ],
+        ],
         ),
       ),
     );
