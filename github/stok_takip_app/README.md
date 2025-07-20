@@ -1,5 +1,7 @@
 # Stok Takip Mobil Uygulaması
 
+![Uygulama Logosu](frontend/assets/images/app_logo.png)
+
 ## Genel Bakış
 
 Stok Takip, kullanıcıların Trendyol, Hepsiburada, Amazon, Pull&Bear, Zara, Bershka, Stradivarius, Koton gibi popüler e-ticaret sitelerinden ürün ekleyip, belirli beden ve renklerin stok durumunu otomatik olarak takip edebileceği bir mobil uygulamadır. Stokta olmayan beden/renk tekrar stoklara girdiğinde kullanıcıya **push bildirim** gönderir.
@@ -71,6 +73,12 @@ flutter run
 - Redis (arka plan görevleri için)
 - Flutter 3.x
 - Firebase projesi (push bildirim için)
+
+---
+
+## Örnek Ekran Görüntüsü
+
+![Uygulama Ekran Görüntüsü](docs/screenshot.png)
 
 ---
 
